@@ -1,5 +1,4 @@
 #載入LineBot所需要的模組
-import os
 from flask import Flask, request, abort
  
 from linebot import (
@@ -13,10 +12,10 @@ from linebot.models import *
 app = Flask(__name__)
  
 # 必須放上自己的Channel Access Token
-line_bot_api = LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN"))
+line_bot_api = LineBotApi('D/YCW+Fut6clw1PlaMthz4f+oBqpxT11fvPehrejDzJIiSKFYEZNx4Y/LGgJa4mFFmiRUdtIQYA/xtKeegljgVZBqmkjqIxz6NllXLVs693zzZs6Nr9aVlUr25UXWryalKwe8odrZSu2EScpwmgLZQdB04t89/1O/w1cDnyilFU=')
  
 # 必須放上自己的Channel Secret
-handler = WebhookHandler(os.environ.get("CHANNEL_SECRET"))
+handler = WebhookHandler('e4dbc1c5f012a8f7ffcd1303eceb82d1')
 
 #line_bot_api.push_message('U878201ff43cf137fffe547e352400c86', TextSendMessage(text='你可以開始了'))
 
@@ -227,7 +226,7 @@ def parsingStr(pStr):
             outStr += '格式為三個數字中間空白隔開，第一個為高/低點\n'
             outStr += '後面兩個數字為中間K棒的開/收盤價(順序不重要)\n'
             outStr += 'ex: 23.5 30 30.8\n\n'
-            outStr += 'F) K佬不在時，出場價格參考\n'
+            outStr += 'F) 出場價格參考\n'
             outStr += '輸入 k/K 加上開盤價格，提供出場方式的參考點位\n'
             outStr += 'ex: k 50.4 / K 121.5\n\n'
             outStr += 'G) 吃啥好勒～\n'
@@ -241,7 +240,20 @@ def parsingStr(pStr):
                 return(randomGuess('多','空',pStr[1:-2]))
         elif '吃' in pStr:
             return randomEat()
-       
+        elif '帥' in pStr:
+            r = random.randint(0,1)
+            if r == 0:
+                return '本本好帥'
+            else:
+                return '本本好帥'
+
+            #return '本本好帥'
+        elif '美' in pStr:
+            r = random.randint(0,1)
+            if r == 0:
+                return '八寶八寶 耶波搭'
+            else:
+                return '八寶八寶 耶波搭'
         else:
             return 'Error'
             
