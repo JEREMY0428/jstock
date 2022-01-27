@@ -1,4 +1,5 @@
 #載入LineBot所需要的模組
+import os
 from flask import Flask, request, abort
  
 from linebot import (
@@ -12,31 +13,27 @@ from linebot.models import *
 app = Flask(__name__)
  
 # 必須放上自己的Channel Access Token
-line_bot_api = LineBotApi('W5FiQ5eJDCN3XcTZd9d3GPTD+5D1iqcYqZBxVj3XJj3kempm7qV9z5w2TSJDo+6UFmiRUdtIQYA/xtKeegljgVZBqmkjqIxz6NllXLVs690y1pWfBxaeTlpLy8cYypKu17GB+XTutLSZXhGMyC0DsgdB04t89/1O/w1cDnyilFU=')
- 
+line_bot_api = LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN"))
 # 必須放上自己的Channel Secret
-handler = WebhookHandler('e4dbc1c5f012a8f7ffcd1303eceb82d1')
+handler = WebhookHandler(os.environ.get("CHANNEL_SECRET"))
 
 #line_bot_api.push_message('U878201ff43cf137fffe547e352400c86', TextSendMessage(text='你可以開始了'))
 
 # 監聽所有來自 /callback 的 Post Request
-@app.route("/callback", methods=['POST'])
+@app.route("/", methods=["GET", "POST"])
 def callback():
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
- 
-  
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
- 
-    # handle webhook body
-    try:
-        handler.handle(body, signature)
-    except InvalidSignatureError:
-        abort(400)
- 
-    return 'OK'
+   if request.method == "GET":
+        return "Hello Heroku"
+    if request.method == "POST":
+        signature = request.headers["X-Line-Signature"]
+        body = request.get_data(as_text=True)
+
+        try:
+            handler.handle(body, signature)
+        except InvalidSignatureError:
+            abort(400)
+
+        return "OK"
 
 #判斷輸入是否為數字
 # By : https://www.itread01.com/content/1549772101.html
